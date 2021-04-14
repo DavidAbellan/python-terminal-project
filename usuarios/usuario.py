@@ -19,21 +19,19 @@ class Usuario :
   
     def registro(self) :
         fecha = datetime.datetime.now()
-        sql = "INSERT INTO usuarios VALUES (null,%s,%s,%s,%s,'"+str(fecha)+"')"
+        sql = "INSERT INTO usuarios VALUES (null,%s,%s,%s,%s,%s)"
         
         #cifrar contraseña
-        #cifrado = hashlib.sha256()
-        #cifrado.update(self.password.encode('utf8'))
-        #print(cifrado)
+        cifrado = hashlib.sha256()
+        cifrado.update(self.password.encode('utf8'))
         
-        usuario = (self.nombre,self.apellidos,self.email,self.password)
-        print(usuario)
-      #  try :
-        cursor.execute(sql, usuario)
-        database.commit()
-        result = [cursor.rowcount, self]
-       # except :
-       #  result=[0,self]    
+        usuario = (self.nombre,self.apellidos,self.email,cifrado.hexdigest(),fecha)
+        try :
+          cursor.execute(sql, usuario)
+          database.commit()
+          result = [cursor.rowcount, self]
+        except :
+          result=[0,self]    
         return result    
 
       
