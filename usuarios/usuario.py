@@ -1,14 +1,8 @@
-import mysql.connector
 import datetime
 import hashlib
-database = mysql.connector.connect (
-    host = "localhost",
-    user = "root",
-    passwd = "",
-    database = "terminal_app_db",
-    port = 3306
-)
-cursor = database.cursor(buffered=True)
+import usuarios.conexion as conexion
+database = conexion.crearDataBase().database
+cursor = conexion.crearDataBase().cursor
 #buffered a true para permitir muchas consultas
 class Usuario : 
     def __init__(self,nombre,apellidos,email,password) :
@@ -36,4 +30,10 @@ class Usuario :
 
       
     def login(self) :
-        return self.apellidos
+        sql ="SELECT * FROM usuarios WHERE nombre = %s AND password = %s"
+        cifrado = hashlib.sha256()
+        cifrado.update(self.password.encode('utf8'))
+        usuario = (self.nombre,cifrado.hexdigest())
+        cursor.execute(sql,usuario)
+        result = cursor.fetchone()
+        return result

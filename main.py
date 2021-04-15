@@ -4,7 +4,7 @@ Acciones disponibles :
        -registro
        -login
 """)
-accion = input("¿Qué quieres hacer?")
+accion = input("¿Qué quieres hacer? ")
 hazEl = ac.Acciones()
 if accion == "registro" :
     hazEl.registro() 
